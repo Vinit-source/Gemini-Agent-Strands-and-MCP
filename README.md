@@ -13,10 +13,17 @@ Learnings from the different repositories within the [Strands Agents](https://gi
 	 chmod +x setup.sh
 	 ./setup.sh
 	 ```
-	 3. Run mcp_calculator.py:
+	 3. Create .env:
+     ```
+     GEMINI_API_KEY='your_gemini_api_key' // Generate your own Gemini API key from [here](https://aistudio.google.com/api-keys).
+     ```
+     4. Run mcp_calculator.py:
 	 ```bash
 	 uv run mcp_calculator.py
 	 ```
 
 ## Note
-You can import geminiAgent.py in your own scripts to utilize Strands and MCP functionalities.
+You can import `geminiAgent.py` in your own scripts to utilize Strands and MCP functionalities.
+```python
+from geminiAgent import GeminiAgent  # Use this in place of the Agent class of Strands
+```
