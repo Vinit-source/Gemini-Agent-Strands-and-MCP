@@ -14,6 +14,8 @@ A fully functional debate/discussion room facilitator that manages conversations
 - [Quick Start Guide](QUICKSTART.md) - Get started in 5 minutes
 - [Full Documentation](DEBATE_ROOM_README.md) - Detailed features and architecture
 - [Example Session](EXAMPLE_SESSION.md) - See it in action
+- [Implementation Summary](IMPLEMENTATION_SUMMARY.md) - Technical implementation details
+- [Requirements Verification](REQUIREMENTS_VERIFICATION.md) - Proof all requirements met
 
 **Key Capabilities:**
 - Topic selection from curated list
