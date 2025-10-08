@@ -2,6 +2,38 @@
 
 Learnings from the different repositories within the [Strands Agents](https://github.com/strands-agents).
 
+## Features
+
+### 1. Calculator Agent (Example)
+A basic example demonstrating MCP server integration with calculation tools.
+
+### 2. Debate Room Facilitator Agent 🆕
+A fully functional debate/discussion room facilitator that manages conversations for 1-6 participants.
+
+**Documentation:**
+- [Quick Start Guide](QUICKSTART.md) - Get started in 5 minutes
+- [Full Documentation](DEBATE_ROOM_README.md) - Detailed features and architecture
+- [Example Session](EXAMPLE_SESSION.md) - See it in action
+- [Implementation Summary](IMPLEMENTATION_SUMMARY.md) - Technical implementation details
+- [Requirements Verification](REQUIREMENTS_VERIFICATION.md) - Proof all requirements met
+
+**Key Capabilities:**
+- Topic selection from curated list
+- Turn management and sequencing
+- Intelligent feedback with fact-checking
+- Discussion pulse sensing
+- Navigation toward convergence/exploration of viewpoints
+
+**Quick Start:**
+```bash
+uv run debate_room_facilitator.py
+```
+
+**Test Components:**
+```bash
+python3 test_debate_room.py
+```
+
 ## Setup Instructions
 1. Clone the repository:
 	 ```bash
