@@ -42,7 +42,7 @@ class DebateRoomFacilitator:
         
         # Connect to the debate tools MCP server
         def create_debate_tools_transport():
-            return streamablehttp_client("http://localhost:8001/mcp/")
+            return streamablehttp_client("http://localhost:8000/mcp/")
         
         self.mcp_client = MCPClient(create_debate_tools_transport)
     
@@ -68,11 +68,11 @@ class DebateRoomFacilitator:
             
             room_config = eval(result['content'][0]['text'])
             
-            if not room_config.get('success'):
+            if room_config.get('success') != "True":
                 raise ValueError(room_config.get('message'))
             
-            self.participants = room_config['participants']
-            self.turn_order = room_config['turn_order']
+            self.participants = eval(room_config['participants'])
+            self.turn_order = eval(room_config['turn_order'])
             self.current_speaker_index = 0
             
             print(f"\n{'='*60}")

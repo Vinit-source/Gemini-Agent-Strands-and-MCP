@@ -189,14 +189,14 @@ Edit the `system_prompt` in `DebateRoomFacilitator.initialize_agent()` to adjust
 - **Framework**: AWS Strands Agents
 - **AI Model**: Google Gemini (via GeminiAgent)
 - **MCP Server**: FastMCP with Streamable HTTP transport
-- **Port**: 8001 (debate tools server)
+- **Port**: 8000 (debate tools server)
 - **Architecture Pattern**: Agent + MCP Tools
 
 ## Troubleshooting
 
-**Server won't start**: Ensure port 8001 is available
+**Server won't start**: Ensure port 8000 is available
 ```bash
-lsof -ti:8001 | xargs kill -9  # Kill any process on port 8001
+lsof -ti:8000 | xargs kill -9  # Kill any process on port 8000
 ```
 
 **Agent not responding**: Check that `GEMINI_API_KEY` is set in `.env`

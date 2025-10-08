@@ -8,7 +8,7 @@ This module provides tools for facilitating debate/discussion rooms including:
 """
 
 from mcp.server import FastMCP
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 import random
 
 # Create MCP server for debate room tools
@@ -84,7 +84,7 @@ def validate_turn(
     speaker: str,
     expected_speaker: str,
     participants: List[str]
-) -> Dict[str, any]:
+) -> Dict[str, str]:
     """
     Validate if a speaker is speaking in their correct turn.
     
@@ -98,20 +98,20 @@ def validate_turn(
     """
     if speaker not in participants:
         return {
-            "valid": False,
+            "valid": "False",
             "message": f"{speaker} is not in the participant list",
             "action": "reject"
         }
     
     if speaker == expected_speaker:
         return {
-            "valid": True,
+            "valid": "True",
             "message": f"It is {speaker}'s turn to speak",
             "action": "allow"
         }
     else:
         return {
-            "valid": False,
+            "valid": "False",
             "message": f"Please wait for your turn. Currently, it is {expected_speaker}'s turn",
             "action": "defer"
         }
@@ -121,7 +121,7 @@ def validate_turn(
 def initialize_room(
     participant_names: List[str],
     room_type: str = "discussion"
-) -> Dict[str, any]:
+) -> Dict[str, str]:
     """
     Initialize a debate or discussion room with participants.
     
@@ -134,23 +134,23 @@ def initialize_room(
     """
     if not participant_names or len(participant_names) < 1:
         return {
-            "success": False,
+            "success": "False",
             "message": "At least 1 participant is required"
         }
     
     if len(participant_names) > 6:
         return {
-            "success": False,
+            "success": "False",
             "message": "Maximum 6 participants allowed"
         }
     
     return {
-        "success": True,
+        "success": "True",
         "room_type": room_type,
-        "participants": participant_names,
-        "participant_count": len(participant_names),
+        "participants": str(participant_names),
+        "participant_count": str(len(participant_names)),
         "first_speaker": participant_names[0],
-        "turn_order": participant_names,
+        "turn_order": str(participant_names),
         "message": f"Room initialized with {len(participant_names)} participant(s)"
     }
 
@@ -159,7 +159,7 @@ def initialize_room(
 def analyze_discussion_pulse(
     statements: List[Dict[str, str]],
     room_type: str = "discussion"
-) -> Dict[str, any]:
+) -> Dict[str, str]:
     """
     Analyze the pulse of the discussion/debate to identify convergence and divergence.
     
@@ -172,8 +172,8 @@ def analyze_discussion_pulse(
     """
     if not statements:
         return {
-            "common_points": [],
-            "diverging_points": [],
+            "common_points": "[]",
+            "diverging_points": "[]",
             "pulse": "just_started",
             "message": "Not enough data to analyze yet"
         }
@@ -182,8 +182,8 @@ def analyze_discussion_pulse(
     speaker_count = len(set(s.get("speaker", "") for s in statements))
     
     return {
-        "total_statements": len(statements),
-        "unique_speakers": speaker_count,
+        "total_statements": str(len(statements)),
+        "unique_speakers": str(speaker_count),
         "pulse": "active" if len(statements) > 3 else "warming_up",
         "participation_level": "high" if speaker_count > len(statements) * 0.6 else "moderate",
         "message": "Discussion is progressing",
@@ -193,8 +193,8 @@ def analyze_discussion_pulse(
 
 def start_debate_tools_server():
     """Start the debate room tools MCP server."""
-    print("Starting Debate Room Tools Server on http://localhost:8001")
-    mcp.run(transport="streamable-http", port=8001)
+    print("Starting Debate Room Tools Server on http://localhost:8000")
+    mcp.run(transport="streamable-http")
 
 
 if __name__ == "__main__":
