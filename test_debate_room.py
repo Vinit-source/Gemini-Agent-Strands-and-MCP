@@ -113,14 +113,24 @@ def test_facilitator_structure():
         from debate_room_facilitator import DebateRoomFacilitator
         print("✓ Facilitator class imported successfully")
         
-        # Test initialization
+        # Test initialization with default rounds
         facilitator = DebateRoomFacilitator(room_type="discussion")
-        print("✓ Facilitator initialized")
+        print("✓ Facilitator initialized with default rounds")
         
         assert facilitator.room_type == "discussion"
+        assert facilitator.num_rounds == 3
         assert facilitator.participants == []
         assert facilitator.topic is None
-        print("✓ Facilitator attributes correct")
+        assert facilitator.english_feedback_history == {}
+        print("✓ Facilitator attributes correct (default)")
+        
+        # Test initialization with custom rounds
+        facilitator2 = DebateRoomFacilitator(room_type="debate", num_rounds=5)
+        print("✓ Facilitator initialized with custom rounds")
+        
+        assert facilitator2.room_type == "debate"
+        assert facilitator2.num_rounds == 5
+        print("✓ Facilitator custom attributes correct")
         
         print("\n" + "="*60)
         print("FACILITATOR STRUCTURE TESTS PASSED! ✓")

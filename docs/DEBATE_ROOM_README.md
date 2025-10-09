@@ -1,6 +1,6 @@
 # Debate Room Facilitator
 
-A fully functional debate/discussion room facilitator agent using AWS Strands and Gemini Agent.
+A fully functional debate/discussion room facilitator agent using AWS Strands and Gemini Agent with **English language learning capabilities**.
 
 ## Overview
 
@@ -8,11 +8,39 @@ This implementation provides an AI-powered facilitator for debate and discussion
 
 - **Select Topics**: Automatically choose debate/discussion topics from a curated list
 - **Manage Turns**: Sequence and coordinate turns for 1-6 participants
+- **Configurable Rounds**: Set a specific number of discussion rounds
 - **Provide Feedback**: Offer humble, kind feedback including:
   - Fact-checking of claims
   - Sensing the pulse of the discussion
   - Navigating toward convergence (discussions) or exploring viewpoints (debates)
   - Highlighting common ground and diverging points
+  - **English language feedback** (grammar, sentence structure, vocabulary)
+- **Final Summary**: Comprehensive English learning summary for each participant
+
+## 🆕 New Features
+
+### 1. English Language Feedback
+The facilitator now provides detailed feedback on:
+- **Sentence structure and framing**
+- **Grammar** (verb tenses, subject-verb agreement, articles, prepositions)
+- **Vocabulary** usage and word choice
+- **Clarity** and coherence
+
+Feedback is formatted as bullet points for each participant after every round.
+
+### 2. Configurable Number of Rounds
+- Set the number of rounds during initialization
+- Discussion automatically ends after specified rounds
+- Provides structure and predictable session duration
+
+### 3. Final English Learning Summary
+At the end of discussion, each participant receives:
+- **Strengths**: What they did well
+- **Areas for Improvement**: Specific patterns to work on
+- **Progress Observed**: Improvements during the session
+- **Tips for Continued Growth**: Actionable suggestions
+
+📖 **See [ENGLISH_FEEDBACK_FEATURE.md](ENGLISH_FEEDBACK_FEATURE.md) for detailed documentation**
 
 ## Components
 
@@ -51,6 +79,7 @@ uv run debate_room_facilitator.py
 1. **Configure the Room**:
    - Choose room type: `debate` or `discussion`
    - Set number of participants (1-6)
+   - **Set number of rounds** (e.g., 3, 5, 10)
    - Enter participant names
 
 2. **Topic Selection**:
@@ -60,11 +89,18 @@ uv run debate_room_facilitator.py
    - Participants speak in turn (round-robin)
    - Type your statement when it's your turn
    - Type `skip` to pass your turn
-   - Type `exit` to end the discussion
+   - Type `exit` to end the discussion early
+   - Discussion runs for the specified number of rounds
 
 4. **Facilitator Feedback**:
    - After each round, the agent provides feedback
    - Feedback includes observations, fact-checking, and guidance
+   - **English feedback formatted as bullet points for each participant**
+
+5. **Final English Summary**:
+   - Comprehensive English learning summary for each participant
+   - Includes strengths, improvements, progress, and tips
+   - Displayed automatically at the end
 
 ## Example Session
 
