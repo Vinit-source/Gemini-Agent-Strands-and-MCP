@@ -11,11 +11,11 @@ A basic example demonstrating MCP server integration with calculation tools.
 A fully functional debate/discussion room facilitator that manages conversations for 1-6 participants.
 
 **Documentation:**
-- [Quick Start Guide](QUICKSTART.md) - Get started in 5 minutes
-- [Full Documentation](DEBATE_ROOM_README.md) - Detailed features and architecture
-- [Example Session](EXAMPLE_SESSION.md) - See it in action
-- [Implementation Summary](IMPLEMENTATION_SUMMARY.md) - Technical implementation details
-- [Requirements Verification](REQUIREMENTS_VERIFICATION.md) - Proof all requirements met
+- [Quick Start Guide](docs/QUICKSTART.md) - Get started in 5 minutes
+- [Full Documentation](docs/DEBATE_ROOM_README.md) - Detailed features and architecture
+- [Example Session](docs/EXAMPLE_SESSION.md) - See it in action
+- [Implementation Summary](docs/IMPLEMENTATION_SUMMARY.md) - Technical implementation details
+- [Requirements Verification](docs/REQUIREMENTS_VERIFICATION.md) - Proof all requirements met
 
 **Key Capabilities:**
 - Topic selection from curated list
