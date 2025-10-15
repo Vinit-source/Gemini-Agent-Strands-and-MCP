@@ -34,6 +34,39 @@ uv run debate_room_facilitator.py
 python3 test_debate_room.py
 ```
 
+### 3. Multi-Agent System with Grammar Correction 🆕✨
+
+An advanced **multi-agent architecture** featuring parallel agent coordination:
+
+- **Facilitator Agent**: Provides discussion facilitation, fact-checking, and convergence navigation
+- **Grammar Correction Agent**: Offers instant feedback on English grammar, sentence structure, and language usage
+
+**Documentation:**
+- [Multi-Agent System Guide](docs/MULTI_AGENT_SYSTEM.md) - Complete architecture and usage guide
+
+**Key Features:**
+- ✨ **Dual-agent coordination** - Facilitator + Grammar agents working in parallel
+- 📝 **Instant grammar feedback** - Real-time language coaching for participants
+- 🌐 **AWS AgentCore integration** - Deploy agents to AWS Bedrock
+- 🎯 **Specialized expertise** - Each agent focuses on its domain
+- ⚙️ **Flexible configuration** - Enable/disable agents as needed
+
+**Quick Start:**
+```bash
+uv run debate_room_facilitator.py
+# Choose "yes" for grammar feedback when prompted
+```
+
+**Test Grammar Agent:**
+```bash
+python3 grammarAgent.py
+```
+
+**AWS Deployment:**
+```bash
+python3 aws_agentcore_integration.py
+```
+
 ## Setup Instructions
 1. Clone the repository:
 	 ```bash
@@ -47,15 +80,47 @@ python3 test_debate_room.py
 	 ```
 	 3. Create .env:
      ```
-     GEMINI_API_KEY='your_gemini_api_key' // Generate your own Gemini API key from [here](https://aistudio.google.com/api-keys).
+     GEMINI_API_KEY='your_gemini_api_key' // Generate your own Gemini API key from https://aistudio.google.com/api-keys
+     
+     # Optional: For AWS AgentCore deployment
+     AWS_ACCESS_KEY_ID='your_aws_access_key_id'
+     AWS_SECRET_ACCESS_KEY='your_aws_secret_access_key'
+     AWS_DEFAULT_REGION='us-east-1'
      ```
-     4. Run mcp_calculator.py:
+     4. Run examples:
 	 ```bash
+	 # Calculator example
 	 uv run mcp_calculator.py
+	 
+	 # Multi-agent debate room with grammar correction
+	 uv run debate_room_facilitator.py
 	 ```
 
+## Architecture
+
+The project demonstrates:
+- **Single-agent systems** (calculator, basic facilitator)
+- **Multi-agent systems** (facilitator + grammar correction)
+- **MCP tool servers** (debate tools, grammar tools)
+- **AWS AgentCore deployment** (cloud-based agent hosting)
+
 ## Note
-You can import `geminiAgent.py` in your own scripts to utilize Strands and MCP functionalities.
+You can import agent classes in your own scripts:
 ```python
-from geminiAgent import GeminiAgent  # Use this in place of the Agent class of Strands
+from geminiAgent import GeminiAgent  # Main facilitator agent
+from grammarAgent import GrammarAgent  # Grammar correction agent
 ```
+
+## Components
+
+- `geminiAgent.py` - Main agent using Gemini model
+- `grammarAgent.py` - Specialized grammar correction agent
+- `debate_room_facilitator.py` - Multi-agent debate room coordinator
+- `debate_room_tools.py` - MCP server for debate tools (port 8000)
+- `grammar_tools.py` - MCP server for grammar tools (port 8001)
+- `aws_agentcore_integration.py` - AWS Bedrock AgentCore deployment
+- `mcp_calculator.py` - Simple calculator example
+
+## License
+
+Apache License 2.0 - See [LICENSE](LICENSE) file for details.

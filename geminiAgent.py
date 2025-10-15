@@ -1,6 +1,6 @@
 import os
 from strands import Agent
-from strands_agents.src.strands.models.gemini import GeminiModel # Import the specific GeminiModel provider
+from strands.models.gemini import GeminiModel # Import the specific GeminiModel provider
 from strands_tools import calculator # Optional: Import a built-in tool
 from dotenv import load_dotenv
 

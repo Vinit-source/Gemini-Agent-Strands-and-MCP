@@ -7,6 +7,7 @@ This agent facilitates debates and discussions by:
 - Providing feedback with fact-checking
 - Navigating discussions to convergence
 - Exploring common and diverging points
+- Multi-agent coordination with grammar correction agent
 """
 
 import threading
@@ -14,6 +15,7 @@ import time
 from typing import List, Dict, Optional
 from mcp.client.streamable_http import streamablehttp_client
 from geminiAgent import GeminiAgent
+from grammarAgent import GrammarAgent
 from strands.tools.mcp.mcp_client import MCPClient
 
 
@@ -22,14 +24,16 @@ class DebateRoomFacilitator:
     A facilitator agent for debate and discussion rooms.
     
     Manages turn-taking, provides feedback, and guides discussions.
+    Coordinates multiple agents: main facilitator and grammar correction agent.
     """
     
-    def __init__(self, room_type: str = "discussion"):
+    def __init__(self, room_type: str = "discussion", enable_grammar_feedback: bool = True):
         """
         Initialize the debate room facilitator.
         
         Args:
             room_type: 'debate' or 'discussion'
+            enable_grammar_feedback: Whether to enable grammar correction agent
         """
         self.room_type = room_type
         self.participants = []
@@ -38,13 +42,23 @@ class DebateRoomFacilitator:
         self.topic = None
         self.conversation_history = []
         self.agent = None
+        self.grammar_agent = None
+        self.enable_grammar_feedback = enable_grammar_feedback
         self.tools = None
+        self.grammar_tools = None
         
         # Connect to the debate tools MCP server
         def create_debate_tools_transport():
             return streamablehttp_client("http://localhost:8000/mcp/")
         
         self.mcp_client = MCPClient(create_debate_tools_transport)
+        
+        # Connect to grammar tools MCP server if enabled
+        if self.enable_grammar_feedback:
+            def create_grammar_tools_transport():
+                return streamablehttp_client("http://localhost:8001/mcp/")
+            
+            self.grammar_mcp_client = MCPClient(create_grammar_tools_transport)
     
     def setup_room(self, participant_names: List[str]):
         """
@@ -133,6 +147,39 @@ Remember: You are a facilitator, not a participant. Your goal is to help the gro
         
         with self.mcp_client:
             self.agent = GeminiAgent(system_prompt=system_prompt, tools=self.tools)
+        
+        # Initialize grammar agent if enabled
+        if self.enable_grammar_feedback:
+            try:
+                with self.grammar_mcp_client:
+                    self.grammar_tools = self.grammar_mcp_client.list_tools_sync()
+                    self.grammar_agent = GrammarAgent(tools=self.grammar_tools)
+                    print("✓ Grammar correction agent initialized")
+            except Exception as e:
+                print(f"⚠ Warning: Could not initialize grammar agent: {e}")
+                print("  Continuing without grammar feedback...")
+                self.enable_grammar_feedback = False
+    
+    def get_grammar_feedback(self, speaker: str, content: str) -> Optional[str]:
+        """
+        Get grammar feedback for a participant's statement.
+        
+        Args:
+            speaker: Name of the speaker
+            content: Content of their statement
+            
+        Returns:
+            Grammar feedback message or None if grammar checking is disabled
+        """
+        if not self.enable_grammar_feedback or not self.grammar_agent:
+            return None
+        
+        try:
+            feedback = self.grammar_agent.analyze_statement(speaker, content)
+            return feedback
+        except Exception as e:
+            print(f"⚠ Warning: Grammar analysis failed: {e}")
+            return None
     
     def process_statement(self, speaker: str, content: str):
         """
@@ -187,18 +234,32 @@ def start_debate_server():
     time.sleep(2)  # Wait for server to start
 
 
+def start_grammar_server():
+    """Start the grammar tools MCP server in a background thread."""
+    from grammar_tools import start_grammar_tools_server
+    server_thread = threading.Thread(target=start_grammar_tools_server, daemon=True)
+    server_thread.start()
+    time.sleep(2)  # Wait for server to start
+
+
 def simulate_debate_room():
     """
     Simulate a debate/discussion room on CLI with multiple participants.
+    Multi-agent system with facilitator and grammar correction agents.
     """
     print("\n" + "="*60)
     print("DEBATE/DISCUSSION ROOM FACILITATOR")
+    print("Multi-Agent System with Grammar Correction")
     print("="*60)
     
     # Get room configuration
     room_type = input("\nRoom type (debate/discussion) [discussion]: ").strip().lower()
     if room_type not in ['debate', 'discussion']:
         room_type = 'discussion'
+    
+    # Ask if grammar feedback is desired
+    grammar_input = input("Enable grammar feedback? (yes/no) [yes]: ").strip().lower()
+    enable_grammar = grammar_input != 'no'
     
     # Get number of participants
     num_participants = input("Number of participants (1-6) [3]: ").strip()
@@ -218,12 +279,16 @@ def simulate_debate_room():
             name = f"Participant{i+1}"
         participant_names.append(name)
     
-    # Start the MCP server
+    # Start the MCP servers
     print("\nStarting debate room tools server...")
     start_debate_server()
     
+    if enable_grammar:
+        print("Starting grammar tools server...")
+        start_grammar_server()
+    
     # Initialize facilitator
-    facilitator = DebateRoomFacilitator(room_type=room_type)
+    facilitator = DebateRoomFacilitator(room_type=room_type, enable_grammar_feedback=enable_grammar)
     
     try:
         facilitator.setup_room(participant_names)
@@ -239,11 +304,15 @@ def simulate_debate_room():
         
         print("\n" + "="*60)
         print("DISCUSSION STARTED")
+        if enable_grammar:
+            print("(Grammar feedback enabled)")
         print("="*60)
         print("\nInstructions:")
         print("- Each participant will be prompted to speak in turn")
         print("- Type your statement when it's your turn")
-        print("- The agent will provide feedback periodically")
+        print("- The facilitator agent will provide feedback periodically")
+        if enable_grammar:
+            print("- The grammar agent will analyze each statement")
         print("- Type 'exit' to end the discussion")
         print("- Type 'skip' to skip your turn")
         print("="*60 + "\n")
@@ -281,10 +350,18 @@ def simulate_debate_room():
                 if user_input:
                     facilitator.process_statement(current_speaker, user_input)
                     statements_since_feedback += 1
+                    
+                    # Get grammar feedback immediately after statement (if enabled)
+                    if enable_grammar and facilitator.enable_grammar_feedback:
+                        print("\n📝 Grammar Feedback:")
+                        grammar_feedback = facilitator.get_grammar_feedback(current_speaker, user_input)
+                        if grammar_feedback:
+                            print(f"{grammar_feedback}")
+                        print()
                 
                 facilitator.advance_turn()
             
-            # Agent provides feedback after each round
+            # Facilitator agent provides feedback after each round
             if statements_since_feedback > 0:
                 print("\n" + "-"*60)
                 print("FACILITATOR FEEDBACK")
