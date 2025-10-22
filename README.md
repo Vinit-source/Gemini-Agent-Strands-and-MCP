@@ -34,6 +34,39 @@ uv run debate_room_facilitator.py
 python3 test_debate_room.py
 ```
 
+### 3. Debate Room Chat Application 🆕🌐
+A modern web-based chat application with React UI, WebSocket real-time communication, and SQLite persistence.
+
+**Documentation:**
+- [Chat Application Guide](docs/CHAT_APPLICATION.md) - Complete setup and usage guide
+
+**Key Features:**
+- 🚀 Real-time chat with WebSocket
+- 👥 Multi-client support
+- 🤖 AI-powered facilitation
+- 💾 Persistent conversation storage (SQLite)
+- 🎨 Modern, responsive React UI
+- 🔄 Live facilitator feedback
+
+**Quick Start:**
+```bash
+# Start both backend and frontend
+./start_chat_app.sh
+
+# Or manually:
+# Terminal 1 - Backend
+python3 debate_chat_server.py
+
+# Terminal 2 - Frontend
+cd debate-room-ui
+npm install
+npm run dev
+```
+
+**Access:**
+- Backend API: http://localhost:8080
+- Frontend UI: http://localhost:5173
+
 ## Setup Instructions
 1. Clone the repository:
 	 ```bash

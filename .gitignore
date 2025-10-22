@@ -14,5 +14,12 @@ debate-room-ui/build/
 *.sqlite
 *.sqlite3
 
+# Logs
+logs/
+*.log
+
 # OS
 .DS_Store
+
+# Preview/Demo files
+ui_preview.html
