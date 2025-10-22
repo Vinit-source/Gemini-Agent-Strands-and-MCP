@@ -3,3 +3,16 @@
 __pycache__/
 
 .env
+
+# Frontend
+debate-room-ui/node_modules/
+debate-room-ui/dist/
+debate-room-ui/build/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# OS
+.DS_Store

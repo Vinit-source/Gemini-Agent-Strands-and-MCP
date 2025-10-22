@@ -15,3 +15,7 @@ tqdm
 uv
 google-genai
 dotenv
+fastapi
+uvicorn[standard]
+websockets
+python-dotenv
